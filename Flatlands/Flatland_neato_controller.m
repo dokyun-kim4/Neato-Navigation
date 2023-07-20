@@ -1,79 +1,59 @@
-distances = zeros(40, 1);
-change_angles = zeros(40, 1);
-
 close all;
+% RUN main.mlx before starting the controller!
 
 %Connect to your Neato or the Simulator - choose one or the other
 [sensors,vels]=neatoSim(-2,0,pi/2,1); %uncomment for simulator
 %[sensors,vels]=neato('192.168.16.97'); %uncomment for physical neato
-pause(5) %wait a bit for the robot to start up
+pause(2) %wait a bit for the robot to start up
 
+theta_i = pi/2; %Starting angle
+for i = 2:length(x_arr)
 
-current_angle = pi/2; %Starting angle
-
-for i = 2:length(r_xes)
-
-    %Calculate where the NEATO is headed
-    current_x = r_xes(i-1);
-    current_y = r_yes(i-1);
-    next_x = r_xes(i);
-    next_y = r_yes(i);
-
-    current_mag = sqrt(current_x^2+current_y^2);
-    next_mag = sqrt(next_x^2+next_y^2);
-
-    distance_to_next_point = sqrt((next_y - current_y)^2 + (next_x - current_x)^2);
+    x_i = x_arr(i-1);
+    y_i = y_arr(i-1);
+    x_next = x_arr(i);
+    y_next = y_arr(i);
     
-    
-    next_angle = atan2(next_y - current_y, next_x - current_x);
-    change_angle = next_angle - current_angle;
+    % Turn to new angle
+    theta_next = atan2(y_next - y_i, x_next - x_i);
+    angle_to_turn = theta_next - theta_i;
 
-    distances(i-1) = distance_to_next_point;
-    change_angles(i-1) = change_angle;
-    
-    % turn to new angle
-    vl = 0.1;
-    vr = 0.1;
-
-    if change_angle > 0
+    if angle_to_turn > 0
+        % CCW
+        vr = 0.1;
         vl = -0.1;
     else
+        % CW
         vr = -0.1;
+        vl = 0.1;
     end
     
+    % Calculate angular velocity
     omega = (vr-vl)/0.245;
-
-    time_spent_angular = abs(change_angle/omega);
+    % Find time needed to turn necessary amount
+    turn_time = abs(angle_to_turn/omega);
     
+    % Turn for that amount of time
     t0 = clock;
-    while (etime(clock,t0)<time_spent_angular)
+    while (etime(clock,t0)<turn_time)
         vels.lrWheelVelocitiesInMetersPerSecond=[vl,vr]; 
     end
-    current_angle = next_angle;
+    % Update theta value
+    theta_i = theta_next;
 
-     %Set linear velocity
+    % Calculate linear travel
+    dist_to_next = sqrt((y_next - y_i)^2 + (x_next - x_i)^2);
     vl = 0.1;
     vr = 0.1;
-
-   
-
-    %Go to new location
-    time_spent_linear = distance_to_next_point/0.1;
+    linear_time = dist_to_next/0.1;
+    % Move for that amount of time
     t1 = clock;
-    while (etime(clock,t1)<time_spent_linear)
+    while (etime(clock,t1)<linear_time)
         vels.lrWheelVelocitiesInMetersPerSecond=[vl,vr]; 
     end
+    % Stop and ready to turn again
     vels.lrWheelVelocitiesInMetersPerSecond=[0,0];
-    
-
-   
-      
-
-   
-    
 end
-
-
 vels.lrWheelVelocitiesInMetersPerSecond=[0,0];
 pause(1);
 
