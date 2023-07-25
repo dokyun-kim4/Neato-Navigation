@@ -107,4 +107,10 @@ function [v,endpoints,inliers,outliers,bestfit_pairs,polar] = find_RANSAC(scan,d
     outliers =remove_zero(final_outlier); %outliers
     endpoints = [min(inliers(:,1)) m*min(inliers(:,1))+b; max(inliers(:,1)) m*max(inliers(:,1))+b];
     bestfit_pairs = bestfit_points; %two points used for best fit line
+    
+    %remove zero from n x 2 matrix
+    function newmat = remove_zero(matrix)
+        newmat=matrix(all(matrix,2),:);
+    end
+
 end
