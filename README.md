@@ -1,5 +1,5 @@
 # Neato-Navigation
-Original code authors: Dexter Friis-Hecht, Dokyun Kim, Ellen Sun  
+Original code authors: [Dexter Friis-Hecht](https://github.com/dfriishecht), [Dokyun Kim](https://github.com/dokyun-kim4), [Ellen Sun](https://github.com/eys123)  
 Refactored by: Dokyun Kim
 
 This is a collection of projects from Olin College's QEA II course.
