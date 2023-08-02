@@ -3,7 +3,7 @@ Original code authors: [Dexter Friis-Hecht](https://github.com/dfriishecht), [Do
 Refactored by: Dokyun Kim
 
 This is a collection of projects from Olin College's QEA II course.
-The original code written during the course has been refactored and explained in detail. 
+The original code written during the course has been refactored with added explanations. 
 
 ## How to use
 Download the folder of a project you would like to see. Follow the instructions on `main.mlx` for the project walkthrough.
