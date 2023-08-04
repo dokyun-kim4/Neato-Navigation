@@ -2,9 +2,7 @@ load("path.mat");
 max_count = 15;
 distances = zeros(max_count, 1);
 change_angles = zeros(max_count, 1);
-plus_angle = 30 * (pi/180);
-plus_distance = 0.7;
-% plus_angle = 0;
+
 
 max_points=3000;
 encoder_data=zeros(max_points,3);
@@ -18,17 +16,11 @@ close all;
 pause(5) %wait a bit for the robot to start up
 
 
-current_angle = pi + plus_angle; %Starting angle
+current_angle = pi + 30 * (pi/180); %Starting angle
 tic;
 sec = toc;
 for i = 2:length(r_xes)
     sec = toc;
-    if i == 3 
-        plus_distance = -.6;
-    end
-    if i == 4
-        plus_distance = 0.2;
-    end
     iter=iter+1;
     %Calculate where the NEATO is headed
     if iter<=max_points
@@ -43,7 +35,7 @@ for i = 2:length(r_xes)
     next_mag = sqrt(next_x^2+next_y^2);
 
     distance_to_next_point = sqrt((next_y - current_y)^2 + (next_x - current_x)^2);
-    distance_to_next_point = distance_to_next_point + plus_distance;
+    
     
     next_angle = atan2(next_y - current_y, next_x - current_x);
     change_angle = next_angle - current_angle;
